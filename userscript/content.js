@@ -2,7 +2,7 @@
 // @name            AtCoder Fav Rating
 // @name:ja         AtCoder Fav Rating
 // @namespace       https://github.com/Coki628/ac-fav-rating
-// @version         1.0
+// @version         1.1
 // @description     You can check your fav's rating for AtCoder!
 // @description:ja  AtCoderのお気に入り管理ページでレート等の情報を確認できます。
 // @author          Coki628
@@ -57,7 +57,7 @@ GM_addStyle(GM_getResourceText('CSS1'));
             let count = Number($(rows[3]).find('td').text());
             let lastCompeted = $(rows[4]).find('td').text();
             // 列追加
-            $tr.prepend('<td></td>')
+            $tr.prepend('<td></td>');
             $tr.append('<td>' + rank + '</td>');
             $tr.append('<td>' + rating + '</td>');
             $tr.append('<td>' + highest + '</td>');
@@ -81,7 +81,17 @@ GM_addStyle(GM_getResourceText('CSS1'));
             $($tr.find('td')[3]).addClass(color);
             color = getColorType(highest);
             $($tr.find('td')[4]).addClass(color);
-
+        })
+        .fail(function(data) {
+            // 削除済ユーザー等への対応
+            $tr.prepend('<td></td>');
+            $tr.append('<td></td>');
+            $tr.append('<td></td>');
+            $tr.append('<td></td>');
+            $tr.append('<td></td>');
+            $tr.append('<td></td>');
+        })
+        .always(function(data) {
             total--;
             if (total === 0) {
                 // 全部終わったらDataTablesを構築
@@ -104,11 +114,6 @@ GM_addStyle(GM_getResourceText('CSS1'));
                     });
                 }).draw();
             }
-        // })
-        // .fail(function(data) {
-        //     console.log('requist error');
-        // })
-        // .always(function(data) {
         });
     }
 
