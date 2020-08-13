@@ -2,10 +2,11 @@
 // @name            AtCoder Fav Rating
 // @name:ja         AtCoder Fav Rating
 // @namespace       https://github.com/Coki628/ac-fav-rating
-// @version         1.1
+// @version         1.1.2
 // @description     You can check your fav's rating for AtCoder!
 // @description:ja  AtCoderのお気に入り管理ページでレート等の情報を確認できます。
 // @author          Coki628
+// @license         MIT
 // @match           https://atcoder.jp/settings/fav*
 // @grant           GM_addStyle
 // @grant           GM_getResourceText
