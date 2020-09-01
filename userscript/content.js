@@ -2,7 +2,7 @@
 // @name            AtCoder Fav Rating
 // @name:ja         AtCoder Fav Rating
 // @namespace       https://github.com/Coki628/ac-fav-rating
-// @version         1.1.2
+// @version         1.1.3
 // @description     You can check your fav's rating for AtCoder!
 // @description:ja  AtCoderのお気に入り管理ページでレート等の情報を確認できます。
 // @author          Coki628
@@ -53,7 +53,7 @@ GM_addStyle(GM_getResourceText('CSS1'));
             // ユーザーページから必要な項目を取得
             let rows = $($($.parseHTML(data)).find('table.dl-table')[1]).find('tbody>tr');
             let rank = Number($(rows[0]).find('td').text().slice(0, -2));
-            let rating = Number($(rows[1]).find('td>span').text());
+            let rating = Number($($(rows[1]).find('td>span')[0]).text());
             let highest = Number($($(rows[2]).find('td>span')[0]).text());
             let count = Number($(rows[3]).find('td').text());
             let lastCompeted = $(rows[4]).find('td').text();
@@ -86,10 +86,10 @@ GM_addStyle(GM_getResourceText('CSS1'));
         .fail(function(data) {
             // 削除済ユーザー等への対応
             $tr.prepend('<td></td>');
-            $tr.append('<td></td>');
-            $tr.append('<td></td>');
-            $tr.append('<td></td>');
-            $tr.append('<td></td>');
+            $tr.append('<td>9999999</td>');
+            $tr.append('<td>0</td>');
+            $tr.append('<td>0</td>');
+            $tr.append('<td>0</td>');
             $tr.append('<td></td>');
         })
         .always(function(data) {
