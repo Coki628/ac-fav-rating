@@ -2,7 +2,7 @@
 // @name            AtCoder Fav Rating
 // @name:ja         AtCoder Fav Rating
 // @namespace       https://github.com/Coki628/ac-fav-rating
-// @version         1.1.3
+// @version         1.1.4
 // @description     You can check your fav's rating for AtCoder!
 // @description:ja  AtCoderのお気に入り管理ページでレート等の情報を確認できます。
 // @author          Coki628
@@ -51,12 +51,24 @@ GM_addStyle(GM_getResourceText('CSS1'));
         })
         .done(function(data) {
             // ユーザーページから必要な項目を取得
-            let rows = $($($.parseHTML(data)).find('table.dl-table')[1]).find('tbody>tr');
-            let rank = Number($(rows[0]).find('td').text().slice(0, -2));
-            let rating = Number($($(rows[1]).find('td>span')[0]).text());
-            let highest = Number($($(rows[2]).find('td>span')[0]).text());
-            let count = Number($(rows[3]).find('td').text());
-            let lastCompeted = $(rows[4]).find('td').text();
+            let rank = 9999999;
+            let rating = 0;
+            let highest = 0;
+            let count = 0;
+            let lastCompeted = '';
+            $($($.parseHTML(data)).find('table.dl-table')[1]).find('tbody>tr').each(function() {
+                if ($(this).find('th').text() === '順位') {
+                    rank = Number($(this).find('td').text().slice(0, -2));
+                } else if ($(this).find('th').text() === 'Rating') {
+                    rating = Number($($(this).find('td>span')[0]).text());
+                } else if ($(this).find('th').text() === 'Rating最高値') {
+                    highest = Number($($(this).find('td>span')[0]).text());
+                } else if ($(this).find('th').text() === 'コンテスト参加回数 ') {
+                    count = Number($(this).find('td').text());
+                } else if ($(this).find('th').text() === '最後に参加した日') {
+                    lastCompeted = $(this).find('td').text();
+                }
+            });
             // 列追加
             $tr.prepend('<td></td>');
             $tr.append('<td>' + rank + '</td>');
@@ -65,15 +77,18 @@ GM_addStyle(GM_getResourceText('CSS1'));
             $tr.append('<td>' + count + '</td>');
             $tr.append('<td>' + lastCompeted + '</td>');
 
-            if (rating >= 4000) {
+            if (rank === 1) {
                 // tourist
-                $tr.find('img').after('<img src="//img.atcoder.jp/assets/icon/crown4000.gif">')
-            } else if (rating >= 3600) {
+                $tr.find('img').after('<img src="//img.atcoder.jp/assets/icon/crown_champion.png">')
+            } else if (rank <= 10) {
                 // 金冠
-                $tr.find('img').after('<img src="//img.atcoder.jp/assets/icon/crown3600.gif">')
-            } else if (rating >= 3200) {
+                $tr.find('img').after('<img src="//img.atcoder.jp/assets/icon/crown_gold.png">')
+            } else if (rank <= 30) {
                 // 銀冠
-                $tr.find('img').after('<img src="//img.atcoder.jp/assets/icon/crown3200.gif">')
+                $tr.find('img').after('<img src="//img.atcoder.jp/assets/icon/crown_silver.png">')
+            } else if (rank <= 100) {
+                // 銅冠
+                $tr.find('img').after('<img src="//img.atcoder.jp/assets/icon/crown_bronze.png">')
             }
 
             // 名前とレートに色付け
