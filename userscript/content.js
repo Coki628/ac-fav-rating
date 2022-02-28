@@ -2,7 +2,7 @@
 // @name            AtCoder Fav Rating
 // @name:ja         AtCoder Fav Rating
 // @namespace       https://github.com/Coki628/ac-fav-rating
-// @version         1.1.4
+// @version         1.1.5
 // @description     You can check your fav's rating for AtCoder!
 // @description:ja  AtCoderのお気に入り管理ページでレート等の情報を確認できます。
 // @author          Coki628
@@ -21,7 +21,7 @@ GM_addStyle(GM_getResourceText('CSS1'));
     'use strict';
 
     // 色のクラス名を取得
-    let getColorType = function(x) {
+    const getColorType = function(x) {
         if (x >= 2800) {
             return 'user-red';
         } else if (2800 > x && x >= 2400) {
@@ -41,10 +41,11 @@ GM_addStyle(GM_getResourceText('CSS1'));
         }
     }
 
-    let getInfo = function(username, $tr) {
+    let total = 0;
+    const getInfo = function(userName, $tr) {
         $.ajax({
-            // url: 'https://atcoder.jp/users/' + username + '/history/json',
-            url: 'https://atcoder.jp/users/' + username,
+            // url: 'https://atcoder.jp/users/' + userName + '/history/json',
+            url: 'https://atcoder.jp/users/' + userName,
             type: 'GET',
             // dataType: 'json',
             dataType: 'html',
@@ -137,17 +138,23 @@ GM_addStyle(GM_getResourceText('CSS1'));
     $($('#vue-fav>div.row>div')[0]).removeClass('col-xs-6').addClass('col-xs-9');
     $($('#vue-fav>div.row>div')[1]).removeClass('col-xs-6').addClass('col-xs-3');
 
-    let $table = $($('#vue-fav').find('table')[0]);
+    const $table = $($('#vue-fav').find('table')[0]);
     // ヘッダ行の挿入
     $table.prepend('<thead><tr><th></th><th>Name</th><th>Rank</th><th>Rating</th><th>Highest Rating</th><th>Rated Matches</th><th>Last Competed</th>');
     // 表が見やすくなるスタイルを追加
     $table.addClass('table-striped table-hover table-bordered');
 
+    const myName = $('div.header-mypage_btn').text().trim();
+    const rows = $table.find('tbody>tr');
+    total = rows.length;
+
     // 各行を取得してユーザー情報を追加していく
-    let rows = $table.find('tbody>tr');
-    let total = rows.length;
     for (let i = 0; i < rows.length; i++) {
-        let username = $(rows[i]).find('td>a').text();
-        getInfo(username, $(rows[i]));
+        const userName = $(rows[i]).find('td>a').text();
+        getInfo(userName, $(rows[i]));
+        // 自分の行を色付け
+        if (myName && myName === userName) {
+            $(rows[i]).css('background-color', '#BAE4F4');
+        }
     }
 })();
